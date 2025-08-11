@@ -13,13 +13,26 @@ public static class RunDurableFunctionsSample
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
         ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));
-        logger.LogInformation("Saying hello.");
-        var outputs = new List<string>();
+        // logger.LogInformation("Saying hello.");
 
-        // Replace name and input with values relevant for your Durable Functions Activity
-        outputs.Add(await context.CallActivityAsync<string>(nameof(SayHello), "Tokyo"));
-        outputs.Add(await context.CallActivityAsync<string>(nameof(SayHello), "Seattle"));
-        outputs.Add(await context.CallActivityAsync<string>(nameof(SayHello), "London"));
+        // TODO:アクティビティ1
+
+        // TODO:アクティビティ2
+
+        // TODO:アクティビティ3
+        // // TODO:アクティビティ3-1
+        // // TODO:アクティビティ3-2
+        // // TODO:アクティビティ3-3(Direct Input)
+
+        // TODO:アクティビティ4
+
+        var outputs = new List<string>
+        {
+            // // Replace name and input with values relevant for your Durable Functions Activity
+            // await context.CallActivityAsync<string>(nameof(SayHello), "Tokyo"),
+            // await context.CallActivityAsync<string>(nameof(SayHello), "Seattle"),
+            // await context.CallActivityAsync<string>(nameof(SayHello), "London")
+        };
 
         // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
         return outputs;

@@ -1,0 +1,52 @@
+# Durable Function Sample
+
+## 環境
+
+* .NET 8.0.407
+* Azure Functions Core Tools 4.1.0
+* Azurite 3.35.0
+
+## 処理フロー
+
+``` mermaid
+graph TD;
+    Start[開始] --> Activity1[アクティビティ関数1];
+    Activity1 --> Activity2[アクティビティ関数2];
+    Activity1 -- エラー --> Error[エラー]
+    Activity2 --> Activity3-1Condition{3-1開始要否};
+    Activity2 -- エラー --> Error[エラー]
+    Activity3-1Condition -- はい--> Activity3-1[アクティビティ関数3-1];
+    Activity3-1Condition -- いいえ--> Activity3Check;
+    Activity3-1 --> Activity3Check;
+    Activity2 --> Activity3-2Condition{3-2開始要否};
+    Activity3-2Condition -- はい --> Activity3-2[アクティビティ関数3-2];
+    Activity3-2Condition -- いいえ --> Activity3Check;
+    Activity3-2 --> Activity3Check;
+    Activity2 --> Activity3-3Condition{3-3開始要否};
+    Activity3-3Condition -- はい --> Activity3-3[アクティビティ関数3-3];
+    Activity3-3Condition -- いいえ --> Activity3Check;
+    Activity3-3 --> Activity3Check{関数3結果チェック};
+    Activity3Check --> Activity4[アクティビティ関数4]
+    Activity3Check -- エラー --> Error[エラー]
+    Activity4 --> End[正常終了];
+    Activity4 -- エラー --> Error[エラー]
+
+```
+
+* アクティビティ関数1
+  * パスパラメータで指定された値をログ出力
+* アクティビティ関数2
+* アクティビティ関数3
+* アクティビティ関数4
+
+## 持続的オーケストレーション
+
+* 
+
+## 参考資料
+
+* [Durable Functions の型と機能](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-types-features-overview)
+* [クイック スタート: C# Durable Functions アプリを作成する](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-isolated-create-first-csharp?pivots=code-editor-vscode)
+* [Durable Functions での関数チェーン - Hello シーケンス サンプル](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-sequence?tabs=csharp)
+* [Core Tools を使用してローカルで Azure Functions を開発する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-csharp)
+* [持続的オーケストレーション](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-orchestrations?source=recommendations&tabs=csharp-inproc)
