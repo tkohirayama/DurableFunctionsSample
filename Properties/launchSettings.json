@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "azure_dfunc": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7276",
+      "launchBrowser": false
+    }
+  }
+}
