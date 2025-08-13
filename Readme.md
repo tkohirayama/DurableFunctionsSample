@@ -36,12 +36,25 @@ graph TD;
 * アクティビティ関数1
   * パスパラメータで指定された値をログ出力
 * アクティビティ関数2
-* アクティビティ関数3
+  * ログ出力
+* アクティビティ関数3 環境変数の値に応じて、処理成功、失敗を決定
+  * アクティビティ関数3-1 10秒待機
+  * アクティビティ関数3-2 15秒待機
+  * アクティビティ関数3-3 30秒待機
 * アクティビティ関数4
+  * ログ出力
 
 ## 持続的オーケストレーション
 
 * 
+
+
+## その他
+
+* [Visual Studio Code で Azure Functions のデバッグ終了後に再デバッグ出来ない問題](https://zenn.dev/microsoft/articles/azure-functions-vscode-debugbug)
+  * 問題の原因は func.exe が終了していないことで起きている
+  * タスクマネージャーから func という名前のプロセスを探して終了させることで再度デバッグ実行が出来る
+  * この作業を自動化する方法が該当の [issue](https://github.com/microsoft/vscode-azurefunctions/issues/4416) で EvilConsultant さんから提案されている
 
 ## 参考資料
 

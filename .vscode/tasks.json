@@ -64,6 +64,12 @@
 			"command": "host start",
 			"isBackground": true,
 			"problemMatcher": "$func-dotnet-watch"
+		},
+		{
+			"label": "Release Blocked Port",
+			"type": "shell",
+			"command": "powershell.exe -ExecutionPolicy Bypass -Command \"Stop-Process -Id (Get-NetTCPConnection -LocalPort 7071).OwningProcess -Force\"",
+			"problemMatcher": []
 		}
 	]
 }
