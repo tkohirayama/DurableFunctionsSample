@@ -6,6 +6,20 @@
 * Azure Functions Core Tools 4.1.0
 * Azurite 3.35.0
 
+## ローカルでのデバッグ実行
+
+* local.settings.json を作成
+
+``` json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  }
+}
+```
+
 ## 処理フロー
 
 ``` mermaid
@@ -44,12 +58,31 @@ graph TD;
 * アクティビティ関数4
   * ログ出力
 
-## 持続的オーケストレーション
+## 基本概念
 
-* 
+## 実行モード
 
+* 1 つは Functions ホスト ランタイムと同じプロセス内 ("インプロセス") で実行、もう 1 つは分離ワーカー プロセス内で実行する
+* [分離ワーカー モデルの利点](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#benefits-of-the-isolated-worker-model)
+  * 関数は独立したプロセスの中で実行される
+  * DI（Dependency Injection）を利用するためには、分離ワーカーモデルである必要がある（インプロセスだと不可）
+* 現状は分離ワーカーモデルで実装するのがデファクトスタンダード
+
+### 持続的オーケストレーション
+
+* aaa
+
+### 構成
+
+* [構成](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#configuration)
+
+### DB, Storageの接続
+
+* [Durable Functions ストレージ プロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)
 
 ## その他
+
+* [Durable Functions のバインド (Azure Functions)](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-bindings?tabs=python-v2%2Cin-process%2C2x-durable-functions&pivots=programming-language-csharp)
 
 * [Visual Studio Code で Azure Functions のデバッグ終了後に再デバッグ出来ない問題](https://zenn.dev/microsoft/articles/azure-functions-vscode-debugbug)
   * 問題の原因は func.exe が終了していないことで起きている
@@ -58,8 +91,9 @@ graph TD;
 
 ## 参考資料
 
-* [Durable Functions の型と機能](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-types-features-overview)
 * [クイック スタート: C# Durable Functions アプリを作成する](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-isolated-create-first-csharp?pivots=code-editor-vscode)
+* [.NET Isolated 版の Durable Functions を使った開発を始める](https://blog.shibayan.jp/entry/20250106/1736147619)
+* [Durable Functions の型と機能](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-types-features-overview)
 * [Durable Functions での関数チェーン - Hello シーケンス サンプル](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-sequence?tabs=csharp)
 * [Core Tools を使用してローカルで Azure Functions を開発する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-csharp)
 * [持続的オーケストレーション](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-orchestrations?source=recommendations&tabs=csharp-inproc)

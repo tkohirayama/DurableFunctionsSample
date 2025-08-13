@@ -3,39 +3,71 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
 using Microsoft.Extensions.Logging;
+using TH.MyApp.DurableFunctionsSample.Activities;
 
 namespace TH.MyApp.DurableFunctionsSample;
 
 public static class RunDurableFunctionsSample
 {
+    // オーケストレータ関数
     [Function(nameof(RunDurableFunctionsSample))]
     public static async Task<List<string>> RunOrchestrator(
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
-        ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));
-        // logger.LogInformation("Saying hello.");
+        // ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));
+        string id = context.GetInput<string>()!;
 
-        // TODO:アクティビティ1
+        await context.CallActivityAsync<string>(nameof(Activity1), id);
 
-        // TODO:アクティビティ2
+        var activity3Condition = await context.CallActivityAsync<Activity3Condition>(nameof(Activity2), id);
 
-        // TODO:アクティビティ3
-        // // TODO:アクティビティ3-1
-        // // TODO:アクティビティ3-2
-        // // TODO:アクティビティ3-3(Direct Input)
-
-        // TODO:アクティビティ4
-
-        var outputs = new List<string>
+        var parallelTasks = new List<Task<Activity3Result>>();
+        if (activity3Condition.Enabled3_1)
         {
-            // // Replace name and input with values relevant for your Durable Functions Activity
-            // await context.CallActivityAsync<string>(nameof(SayHello), "Tokyo"),
-            // await context.CallActivityAsync<string>(nameof(SayHello), "Seattle"),
-            // await context.CallActivityAsync<string>(nameof(SayHello), "London")
-        };
+            var param = new Activity3Param
+            {
+                TaskName = "Activity3-1",
+                Count = activity3Condition.Count3_1,
+                Status = "success"
+            };
+            parallelTasks.Add(context.CallActivityAsync<Activity3Result>(nameof(Activity3), param));
+        }
+        if (activity3Condition.Enabled3_2)
+        {
+            var param = new Activity3Param
+            {
+                TaskName = "Activity3-2",
+                Count = activity3Condition.Count3_2,
+                Status = "success"
+            };
+            parallelTasks.Add(context.CallActivityAsync<Activity3Result>(nameof(Activity3), param));
+        }
+        if (activity3Condition.Enabled3_3)
+        {
+            var param = new Activity3Param
+            {
+                TaskName = "Activity3-3",
+                Count = activity3Condition.Count3_3,
+                Status = "success"
+            };
+            parallelTasks.Add(context.CallActivityAsync<Activity3Result>(nameof(Activity3), param));
+        }
+
+        // 3-1〜3-3並列実行
+        var results = new List<Activity3Result>();
+        if (parallelTasks.Count > 0)
+        {
+            var completedResults = await Task.WhenAll(parallelTasks);
+            results.AddRange(completedResults);
+        }
+
+        if (!results.TrueForAll(r => r.Status == "success"))
+        {
+            throw new Exception("One or more 3-x activities failed.");
+        }
 
         // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-        return outputs;
+        return new List<string>();
     }
 
     [Function(nameof(SayHello))]
@@ -46,17 +78,19 @@ public static class RunDurableFunctionsSample
         return $"Hello {name}!";
     }
 
+    // スターター関数
     [Function("RunDurableFunctionsSample_HttpStart")]
     public static async Task<HttpResponseData> HttpStart(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "start/{id}")] HttpRequestData req,
         [DurableClient] DurableTaskClient client,
+        string id,
         FunctionContext executionContext)
     {
         ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample_HttpStart");
 
         // Function input comes from the request content.
         string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(
-            nameof(RunDurableFunctionsSample));
+            nameof(RunDurableFunctionsSample), id);
 
         logger.LogInformation("Started orchestration with ID = '{instanceId}'.", instanceId);
 
