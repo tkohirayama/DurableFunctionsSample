@@ -7,11 +7,11 @@ using TH.MyApp.DurableFunctionsSample.Activities;
 
 namespace TH.MyApp.DurableFunctionsSample;
 
-public static class RunDurableFunctionsSample
+public class RunDurableFunctionsSample
 {
     // オーケストレータ関数
     [Function(nameof(RunDurableFunctionsSample))]
-    public static async Task<List<string>> RunOrchestrator(
+    public async Task<List<string>> RunOrchestrator(
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
         // ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));

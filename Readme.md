@@ -25,7 +25,7 @@
 * SQL Serverの起動
 
 ``` bash
-docker-compose up -d
+docker compose up -d
 ```
 
 * （初回のみ）DBに接続し、DDL.sqlを実行（任意のクライアントツールで接続、実行）
@@ -37,12 +37,16 @@ sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
 
 * （初回のみ）SQL Serverの接続用シークレット作成
 
-<!-- TODO: DB接続文字列設定-->
 ``` bash
-dotnet user-secrets set "Movies:ServiceApiKey" "12345"
+dotnet user-secrets set "ConnectionStrings:DurableFunctionsSampleDB" "Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True"
 ```
 
-* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start Blob Service` を実行
+* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
+
+* （任意）作業環境に合わせて各種設定ファイルを調整
+  * sqlserver.env
+  * docker-compose.yaml
+  * local.settings.json
 
 ### デバッグ実行
 
@@ -99,7 +103,8 @@ graph TD;
 
 ### 持続的オーケストレーション
 
-* aaa
+<!--TODO: 持続的オーケストレーションについてポイントをまとめる-->
+* ****
 
 ### 構成
 
