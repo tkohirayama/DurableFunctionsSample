@@ -9,7 +9,7 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
 
         [Function("Activity2")]
         // public static Task<Activity3Condition> RunActivity2([ActivityTrigger] IConfiguration configuration, FunctionContext executionContext)
-        public static async Task<Activity3Condition> RunActivity2([ActivityTrigger] FunctionContext executionContext)
+        public static async Task<Activity3Condition> RunActivity([ActivityTrigger] FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
             logger.LogInformation($"2 started");

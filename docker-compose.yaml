@@ -1,0 +1,14 @@
+version: "3.8"
+services: 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver2022
+    hostname: sqlserver2022
+    ports:
+      - 1433:1433
+    volumes:
+      - ./mssql/data:/var/opt/mssql/data
+      - ./mssql/log:/var/opt/mssql/log
+      - ./mssql/secrets:/var/opt/mssql/sec
+    env_file: 
+      - sqlserver.env

@@ -6,7 +6,7 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
     public class Activity3
     {
         [Function("Activity3")]
-        public static async Task<Activity3Result> RunActivity3_1([ActivityTrigger] Activity3Param param, FunctionContext executionContext)
+        public static async Task<Activity3Result> RunActivity([ActivityTrigger] Activity3Param param, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
             logger.LogInformation($"{param.TaskName} started");

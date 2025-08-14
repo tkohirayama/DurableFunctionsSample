@@ -263,6 +263,10 @@ paket-files/
 __pycache__/
 *.pyc
 
+# azurite
 __blobstorage__/*
 __queuestorage__/*
 __azurite*
+
+# mssql
+mssql/*

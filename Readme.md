@@ -8,6 +8,8 @@
 
 ## ローカルでのデバッグ実行
 
+### 事前準備
+
 * local.settings.json を作成
 
 ``` json
@@ -19,6 +21,32 @@
   }
 }
 ```
+
+* SQL Serverの起動
+
+``` bash
+docker-compose up -d
+```
+
+* （初回のみ）DBに接続し、DDL.sqlを実行（任意のクライアントツールで接続、実行）
+
+``` bash
+# sqlcmd.exe で実行する場合 
+sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
+```
+
+* （初回のみ）SQL Serverの接続用シークレット作成
+
+<!-- TODO: DB接続文字列設定-->
+``` bash
+dotnet user-secrets set "Movies:ServiceApiKey" "12345"
+```
+
+* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start Blob Service` を実行
+
+### デバッグ実行
+
+* VSCodeの場合、実行とデバッグ（Ctrl+Shift+D）より、Attach to .NET Functions を起動
 
 ## 処理フロー
 
@@ -56,7 +84,8 @@ graph TD;
   * アクティビティ関数3-2 15秒待機
   * アクティビティ関数3-3 30秒待機
 * アクティビティ関数4
-  * ログ出力
+  * ファイルのダウンロード
+  * ファイルのアップロード
 
 ## 基本概念
 
@@ -80,6 +109,8 @@ graph TD;
 
 * [Durable Functions ストレージ プロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)
 
+* [Visual Studio Code を使用して Azure Functions を Azure SQL Database に接続する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-azure-sql-vs-code?pivots=programming-language-csharp)
+
 ## その他
 
 * [Durable Functions のバインド (Azure Functions)](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-bindings?tabs=python-v2%2Cin-process%2C2x-durable-functions&pivots=programming-language-csharp)
@@ -89,6 +120,8 @@ graph TD;
   * タスクマネージャーから func という名前のプロセスを探して終了させることで再度デバッグ実行が出来る
   * この作業を自動化する方法が該当の [issue](https://github.com/microsoft/vscode-azurefunctions/issues/4416) で EvilConsultant さんから提案されている
 
+* [SQLServerをdocker-composeで使いたい！](https://qiita.com/y-yoshizawa/items/4535c06eaa0245a6cd0d)
+
 ## 参考資料
 
 * [クイック スタート: C# Durable Functions アプリを作成する](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-isolated-create-first-csharp?pivots=code-editor-vscode)
@@ -97,3 +130,4 @@ graph TD;
 * [Durable Functions での関数チェーン - Hello シーケンス サンプル](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-sequence?tabs=csharp)
 * [Core Tools を使用してローカルで Azure Functions を開発する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-csharp)
 * [持続的オーケストレーション](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-orchestrations?source=recommendations&tabs=csharp-inproc)
+* [Azure Functions の分離ワーカー モデルでユーザー シークレットを使う方法](https://zenn.dev/microsoft/articles/isolated-functions-user-secret)

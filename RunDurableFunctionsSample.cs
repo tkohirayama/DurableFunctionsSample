@@ -63,19 +63,15 @@ public static class RunDurableFunctionsSample
 
         if (!results.TrueForAll(r => r.Status == "success"))
         {
+            // TODO: 例外処理の確認
             throw new Exception("One or more 3-x activities failed.");
         }
 
-        // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-        return new List<string>();
-    }
+        await context.CallActivityAsync<string>(nameof(Activity4));
 
-    [Function(nameof(SayHello))]
-    public static string SayHello([ActivityTrigger] string name, FunctionContext executionContext)
-    {
-        ILogger logger = executionContext.GetLogger("SayHello");
-        logger.LogInformation("Saying hello to {name}.", name);
-        return $"Hello {name}!";
+        // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
+        // TOOD: オーケストレーション関数の戻り値
+        return [];
     }
 
     // スターター関数

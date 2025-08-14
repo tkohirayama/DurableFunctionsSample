@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>TH.MyApp.DurableFunctionsSample</RootNamespace>
+    <UserSecretsId>165ecc35-d352-467c-9668-82858ec35a0d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
