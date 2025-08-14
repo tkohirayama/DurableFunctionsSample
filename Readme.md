@@ -22,11 +22,18 @@
 }
 ```
 
+* （任意）作業環境に合わせて各種設定ファイルを調整
+  * sqlserver.env
+  * docker-compose.yaml
+  * local.settings.json
+
 * SQL Serverの起動
 
 ``` bash
 docker compose up -d
 ```
+
+* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
 
 * （初回のみ）DBに接続し、DDL.sqlを実行（任意のクライアントツールで接続、実行）
 
@@ -40,13 +47,6 @@ sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
 ``` bash
 dotnet user-secrets set "ConnectionStrings:DurableFunctionsSampleDB" "Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True"
 ```
-
-* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
-
-* （任意）作業環境に合わせて各種設定ファイルを調整
-  * sqlserver.env
-  * docker-compose.yaml
-  * local.settings.json
 
 ### デバッグ実行
 
@@ -109,6 +109,10 @@ graph TD;
 ### 構成
 
 * [構成](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#configuration)
+
+* [クイック スタート: MSSQL ストレージ プロバイダーを使用する Durable Functions アプリを作成する](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/quickstart-mssql)
+  * Durable Functions はアプリケーションの状態、チェックポイント、再起動をDBで管理（デフォルトはBlobストレージ）
+  * [複数のストレージプロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)がサポートされている
 
 ### DB, Storageの接続
 

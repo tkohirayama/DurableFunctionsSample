@@ -13,7 +13,7 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
             for (int i = 1; i <= param.Count; i++)
             {
                 await Task.Delay(1000); // 1秒待機
-                logger.LogInformation($"Activity3_1: {i}秒経過");
+                logger.LogInformation($"{param.TaskName}: {i}秒経過");
             }
             logger.LogInformation($"{param.TaskName} finish");
             return new Activity3Result
