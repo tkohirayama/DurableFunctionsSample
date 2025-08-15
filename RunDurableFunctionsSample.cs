@@ -14,13 +14,19 @@ public class RunDurableFunctionsSample
     public async Task<List<string>> RunOrchestrator(
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
-        // ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));
         string fileName = context.GetInput<string>()!;
-
-        await context.CallActivityAsync<string>(nameof(Activity1), fileName);
+        
+        // Activity オプション
+        TaskOptions activity1Options = new TaskOptions(
+            // リトライ設定
+            new TaskRetryOptions (new RetryPolicy(
+                maxNumberOfAttempts: 3,
+                firstRetryInterval: TimeSpan.FromSeconds(5)
+            ))
+        );
+        await context.CallActivityAsync<string>(nameof(Activity1), fileName, activity1Options);
 
         var activity3Condition = await context.CallActivityAsync<Activity3Condition>(nameof(Activity2), fileName);
-
         var parallelTasks = new List<Task<Activity3Result>>();
         if (activity3Condition.Enabled3_1)
         {

@@ -1,5 +1,7 @@
 # Durable Function Sample
 
+* [Durable Functions とは](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-overview?tabs=in-process%2Cnodejs-v3%2Cv1-model&pivots=csharp)
+
 ## 環境
 
 * .NET 8.0.407
@@ -68,15 +70,15 @@ http://localhost:7071/api/start/{fileName}
 
 ## Azure環境での実行
 
-## 事前準備
+### 事前準備
 
 TODO: Azure環境での準備手順
 
-## 実行
+### 実行
 
 TODO: Azure環境での実行手順
 
-## 仕様
+## プログラム仕様
 
 ### 概要
 
@@ -158,6 +160,12 @@ graph TD;
   * 関数コードでは、SQL リレーショナル データベースに接続するために、.NET Framework Data Provider for SQL Server (SqlClient) を使用できる
 
 * [Visual Studio Code を使用して Azure Functions を Azure SQL Database に接続する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-azure-sql-vs-code?pivots=programming-language-csharp)
+
+### エラー処理
+
+* (Durable Functions のエラー処理 (Azure Functions))[https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-error-handling?tabs=csharp-inproc]
+  * ※注意：リトライの実装などが、おそらくインプロセスモードでのサンプルになっている。プロセス分離モード（`TaskOrchestrationContext`での実装）で対応するメソッドは、[こちら](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-dotnet-isolated-overview#public-api-changes)を参照
+  * アクティビティ関数でスローされた例外はオーケストレーター関数に戻され、`FunctionFailedException` としてスローされる
 
 ### ファンイン/ファンアウト
 
