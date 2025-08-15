@@ -8,11 +8,13 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
     public class Activity4
     {
         private readonly BlobServiceClient _blobServiceClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly string _containerName = "dfunc";
 
-        public Activity4(BlobServiceClient blobServiceClient)
+        public Activity4(BlobServiceClient blobServiceClient, IHttpClientFactory httpClientFactory)
         {
             _blobServiceClient = blobServiceClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         [Function("Activity4")]
@@ -21,8 +23,10 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
             logger.LogInformation($"4 started {_blobServiceClient.AccountName}");
 
-            // Blobファイルダウンロード(一時領域へのダウンロード)
-            // logger.LogInformation($"4 download {fileName}");
+            // https://example.com へのアクセス
+            var request = new HttpRequestMessage(HttpMethod.Get, "https://example.com");
+            var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.SendAsync(request);
 
             // Blobファイルアップロード（上書き）
             logger.LogInformation($"4 upload {fileName}");
@@ -30,7 +34,8 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
             await container.CreateIfNotExistsAsync();
 
             var blob = container.GetBlobClient($"{fileName}.txt");
-            await blob.UploadAsync(BinaryData.FromString($"{fileName} Contents"), true);
+            var content = await response.Content.ReadAsStreamAsync();
+            await blob.UploadAsync(content, true);
             return;
         }
     }

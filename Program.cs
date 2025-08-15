@@ -26,6 +26,8 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
+builder.Services.AddHttpClient();
+
 builder.Configuration.AddUserSecrets<Program>();
 builder.Services
     .AddAzureClients(clientBuilder =>
