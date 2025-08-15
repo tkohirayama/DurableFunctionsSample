@@ -15,32 +15,29 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
         }
 
         [Function("Activity1")]
-        public async Task RunActivity([ActivityTrigger] string input, FunctionContext executionContext)
+        public async Task RunActivity([ActivityTrigger] string fileName, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
-            logger.LogInformation($"1 started {input}");
+            logger.LogInformation($"1 started. fileName: {fileName}");
 
             var connectionString = _configuration.GetConnectionString("DurableFunctionsSampleDB");
 
-            // TODO: EF Core
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                string sql = @"
+                string insertSql = @"
                     INSERT INTO 
-                        dfunc.ProcessStartLog (Id, StartTime)
+                        dfunc.ProcessStartLog (Id, FileName, StartTime)
                     VALUES 
-                        (NEXT VALUE FOR dfunc.Seq_ProcessStart, @StartTime);";
+                        (NEXT VALUE FOR dfunc.Seq_ProcessStart, @FileName, @StartTime);";
 
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                using (SqlCommand cmd = new SqlCommand(insertSql, conn))
                 {
                     cmd.Parameters.AddWithValue("@StartTime", DateTime.Now);
-
+                    cmd.Parameters.AddWithValue("@FileName", fileName);
                     int rows = await cmd.ExecuteNonQueryAsync();
                 }
             }
-
             return;
         }
     }

@@ -15,11 +15,11 @@ public class RunDurableFunctionsSample
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
         // ILogger logger = context.CreateReplaySafeLogger(nameof(RunDurableFunctionsSample));
-        string id = context.GetInput<string>()!;
+        string fileName = context.GetInput<string>()!;
 
-        await context.CallActivityAsync<string>(nameof(Activity1), id);
+        await context.CallActivityAsync<string>(nameof(Activity1), fileName);
 
-        var activity3Condition = await context.CallActivityAsync<Activity3Condition>(nameof(Activity2), id);
+        var activity3Condition = await context.CallActivityAsync<Activity3Condition>(nameof(Activity2), fileName);
 
         var parallelTasks = new List<Task<Activity3Result>>();
         if (activity3Condition.Enabled3_1)
@@ -67,26 +67,27 @@ public class RunDurableFunctionsSample
             throw new Exception("One or more 3-x activities failed.");
         }
 
-        await context.CallActivityAsync<string>(nameof(Activity4));
+        await context.CallActivityAsync<string>(nameof(Activity4), fileName);
 
         // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
-        // TOOD: オーケストレーション関数の戻り値
+        // TODO: オーケストレーション関数の戻り値
+
         return [];
     }
 
     // スターター関数
     [Function("RunDurableFunctionsSample_HttpStart")]
     public static async Task<HttpResponseData> HttpStart(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "start/{id}")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "start/{fileName}")] HttpRequestData req,
         [DurableClient] DurableTaskClient client,
-        string id,
+        string fileName,
         FunctionContext executionContext)
     {
         ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample_HttpStart");
 
         // Function input comes from the request content.
         string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(
-            nameof(RunDurableFunctionsSample), id);
+            nameof(RunDurableFunctionsSample), fileName);
 
         logger.LogInformation("Started orchestration with ID = '{instanceId}'.", instanceId);
 

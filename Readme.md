@@ -4,7 +4,7 @@
 
 * .NET 8.0.407
 * Azure Functions Core Tools 4.1.0
-* Azurite 3.35.0
+* Azurite 3.35.0 ※Visual Studio Code拡張
 
 ## ローカルでのデバッグ実行
 
@@ -59,7 +59,16 @@ dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDB' 'Data Sourc
 
 ### デバッグ実行
 
-* VSCodeの場合、実行とデバッグ（Ctrl+Shift+D）より、Attach to .NET Functions を起動
+* VSCodeの場合、実行とデバッグ（Ctrl+Shift+D）より、`Attach to .NET Functions` を起動
+* 任意のブラウザで以下のURLにアクセス
+
+``` url
+http://localhost:7071/api/start/{fileName}
+```
+
+### Azure環境での実行
+
+TODO: Azure環境での実行手順
 
 ## 処理フロー
 
@@ -89,6 +98,7 @@ graph TD;
 ```
 
 * アクティビティ関数1 - DB接続
+  * ファイル名、実行日時を記録
 * アクティビティ関数2 - 環境設定読込、アクティビティ関数3の実行条件設定
 * アクティビティ関数3 環境変数の値に応じて、処理成功、失敗を決定
   * アクティビティ関数3-1
@@ -96,11 +106,12 @@ graph TD;
   * アクティビティ関数3-3
 * アクティビティ関数4
   * ファイルのダウンロード TODO:未実装
-  * ファイルのアップロード TODO:未実装
+  * ファイルのアップロード
+    * URLで指定したファイル名でアップロード
 
 ## 基本概念
 
-## 実行モード
+### 実行モード
 
 * 1 つは Functions ホスト ランタイムと同じプロセス内 ("インプロセス") で実行、もう 1 つは分離ワーカー プロセス内で実行する
 * [分離ワーカー モデルの利点](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#benefits-of-the-isolated-worker-model)
@@ -111,21 +122,30 @@ graph TD;
 ### 持続的オーケストレーション
 
 <!--TODO: 持続的オーケストレーションについてポイントをまとめる-->
-* ****
+* [持続的オーケストレーション](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-orchestrations?source=recommendations&tabs=csharp-inproc)
 
 ### 構成
 
 * [構成](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#configuration)
 
+* [Durable Functions ストレージ プロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)
 * [クイック スタート: MSSQL ストレージ プロバイダーを使用する Durable Functions アプリを作成する](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/quickstart-mssql)
   * Durable Functions はアプリケーションの状態、チェックポイント、再起動をDBで管理（デフォルトはBlobストレージ）
   * [複数のストレージプロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)がサポートされている
 
 ### DB, Storageの接続
 
-* [Durable Functions ストレージ プロバイダー](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-storage-providers)
+* [Azure Functions での接続の管理](https://learn.microsoft.com/ja-jp/azure/azure-functions/manage-connections?tabs=csharp)
+  * 従量課金プランで多くの関数が同時に実行されている場合、利用可能な接続が不足する可能性がある。
+  * 必要以上に多くの接続を使用しないように関数をコーディングする必要がある。
+  * 関数コードでは、SQL リレーショナル データベースに接続するために、.NET Framework Data Provider for SQL Server (SqlClient) を使用できる
 
 * [Visual Studio Code を使用して Azure Functions を Azure SQL Database に接続する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-add-output-binding-azure-sql-vs-code?pivots=programming-language-csharp)
+
+### ファンイン/ファンアウト
+
+* [Durable Functions のファンアウト/ファンイン シナリオ - クラウド バックアップの例](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-cloud-backup?tabs=csharp)
+  * "ファンアウト/ファンイン" は、複数の関数を同時に実行した後、その結果に対して集計を行うパターン
 
 ## その他
 
@@ -145,5 +165,4 @@ graph TD;
 * [Durable Functions の型と機能](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-types-features-overview)
 * [Durable Functions での関数チェーン - Hello シーケンス サンプル](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-sequence?tabs=csharp)
 * [Core Tools を使用してローカルで Azure Functions を開発する](https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-csharp)
-* [持続的オーケストレーション](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-orchestrations?source=recommendations&tabs=csharp-inproc)
 * [Azure Functions の分離ワーカー モデルでユーザー シークレットを使う方法](https://zenn.dev/microsoft/articles/isolated-functions-user-secret)

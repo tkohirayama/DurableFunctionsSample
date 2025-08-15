@@ -16,6 +16,7 @@ CREATE SEQUENCE dfunc.Seq_ProcessStart
 -- テーブル作成
 CREATE TABLE dfunc.ProcessStartLog (
     Id BIGINT NOT NULL PRIMARY KEY,       -- シーケンス番号
+    FileName NVARCHAR(max),               -- ファイル名
     StartTime DATETIME2 NOT NULL          -- 開始日時
 );
 GO
