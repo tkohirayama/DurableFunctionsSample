@@ -134,7 +134,7 @@ graph TD;
 * [分離ワーカー モデルの利点](https://learn.microsoft.com/ja-jp/azure/azure-functions/dotnet-isolated-process-guide?tabs=ihostapplicationbuilder%2Cwindows#benefits-of-the-isolated-worker-model)
   * 関数は独立したプロセスの中で実行される
   * DI（Dependency Injection）を利用するためには、分離ワーカーモデルである必要がある（インプロセスだと不可）
-* 現状は分離ワーカーモデルで実装するのがデファクトスタンダード
+* 現状は分離ワーカーモデルで実装するのが推奨
 
 ### 持続的オーケストレーション
 
