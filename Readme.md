@@ -66,11 +66,27 @@ dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDB' 'Data Sourc
 http://localhost:7071/api/start/{fileName}
 ```
 
-### Azure環境での実行
+## Azure環境での実行
+
+## 事前準備
+
+TODO: Azure環境での準備手順
+
+## 実行
 
 TODO: Azure環境での実行手順
 
-## 処理フロー
+## 仕様
+
+### 概要
+
+* HTTPトリガーによって起動する Durable Functions 実装
+* Durable Functionsにおける特徴的な機能を実行する
+  * 複数の処理を同時実行（ファンイン/ファンアウト）
+  * DB、Blobストレージへのアクセス検証用機能
+  * ログ出力
+
+### 処理フロー
 
 ``` mermaid
 graph TD;
@@ -105,7 +121,8 @@ graph TD;
   * アクティビティ関数3-2
   * アクティビティ関数3-3
 * アクティビティ関数4
-  * ファイルのダウンロード TODO:未実装
+  * ファイルのダウンロード
+    * TODO:ダウンロード設計、実装
   * ファイルのアップロード
     * URLで指定したファイル名でアップロード
 
