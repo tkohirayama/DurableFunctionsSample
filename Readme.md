@@ -17,7 +17,16 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "Activity3Condition:Enabled3_1": true,
+    "Activity3Condition:Count3_1": 2,
+    "Activity3Condition:Enabled3_2": true,
+    "Activity3Condition:Count3_2": 3,
+    "Activity3Condition:Enabled3_3": true,
+    "Activity3Condition:Count3_3": 5
+  },
+  "ConnectionStrings": {
+    "BlobStorage": "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
   }
 }
 ```
@@ -79,17 +88,15 @@ graph TD;
 
 ```
 
-* アクティビティ関数1
-  * パスパラメータで指定された値をログ出力
-* アクティビティ関数2
-  * ログ出力
+* アクティビティ関数1 - DB接続
+* アクティビティ関数2 - 環境設定読込、アクティビティ関数3の実行条件設定
 * アクティビティ関数3 環境変数の値に応じて、処理成功、失敗を決定
-  * アクティビティ関数3-1 10秒待機
-  * アクティビティ関数3-2 15秒待機
-  * アクティビティ関数3-3 30秒待機
+  * アクティビティ関数3-1
+  * アクティビティ関数3-2
+  * アクティビティ関数3-3
 * アクティビティ関数4
-  * ファイルのダウンロード
-  * ファイルのアップロード
+  * ファイルのダウンロード TODO:未実装
+  * ファイルのアップロード TODO:未実装
 
 ## 基本概念
 
