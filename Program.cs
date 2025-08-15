@@ -10,10 +10,23 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
+// TODO: ミドルウェア実装
+// builder
+    // .UseMiddleware<ExceptionHandlingMiddleware>();
+    // .UseMiddleware<MyCustomMiddleware>()
+    // .UseWhen<StampHttpHeaderMiddleware>((context) =>
+    // {
+    //     // We want to use this middleware only for http trigger invocations.
+    //     return context.FunctionDefinition.InputBindings.Values
+    //                     .First(a => a.Type.EndsWith("Trigger")).Type == "httpTrigger";
+    // });
+
+// TODO: 監視の構成
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
+builder.Configuration.AddUserSecrets<Program>();
 builder.Services
     .AddAzureClients(clientBuilder =>
         {

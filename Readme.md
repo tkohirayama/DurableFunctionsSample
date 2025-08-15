@@ -45,7 +45,7 @@ sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
 * （初回のみ）SQL Serverの接続用シークレット作成
 
 ``` bash
-dotnet user-secrets set "ConnectionStrings:DurableFunctionsSampleDB" "Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True"
+dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDB' 'Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True'
 ```
 
 ### デバッグ実行

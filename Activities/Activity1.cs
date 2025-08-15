@@ -1,20 +1,47 @@
 namespace TH.MyApp.DurableFunctionsSample.Activities
 {
     using Microsoft.Azure.Functions.Worker;
+    using Microsoft.Data.SqlClient;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     public class Activity1
     {
+        private readonly IConfiguration _configuration;
+
+        public Activity1(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         [Function("Activity1")]
-        public static Task RunActivity([ActivityTrigger] string input, FunctionContext executionContext)
+        public async Task RunActivity([ActivityTrigger] string input, FunctionContext executionContext)
         {
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
             logger.LogInformation($"1 started {input}");
 
-            // TODO:DB接続、SQL実行
-            // COMMIT
+            var connectionString = _configuration.GetConnectionString("DurableFunctionsSampleDB");
 
-            return Task.CompletedTask;
+            // TODO: EF Core
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string sql = @"
+                    INSERT INTO 
+                        dfunc.ProcessStartLog (Id, StartTime)
+                    VALUES 
+                        (NEXT VALUE FOR dfunc.Seq_ProcessStart, @StartTime);";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@StartTime", DateTime.Now);
+
+                    int rows = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+
+            return;
         }
     }
 }
