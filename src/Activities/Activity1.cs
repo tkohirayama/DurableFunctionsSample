@@ -1,17 +1,15 @@
 namespace TH.MyApp.DurableFunctionsSample.Activities
 {
     using Microsoft.Azure.Functions.Worker;
-    using Microsoft.Data.SqlClient;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     public class Activity1
     {
-        private readonly IConfiguration _configuration;
+        private readonly DurableFunctionsSampleContext _durableFunctionsSampleContext;
 
-        public Activity1(IConfiguration configuration)
+        public Activity1(DurableFunctionsSampleContext durableFunctionsSampleContext)
         {
-            _configuration = configuration;
+            _durableFunctionsSampleContext = durableFunctionsSampleContext;
         }
 
         [Function("Activity1")]
@@ -20,25 +18,14 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
             ILogger logger = executionContext.GetLogger("RunDurableFunctionsSample");
             logger.LogInformation($"1 started. fileName: {fileName}");
 
-            var connectionString = _configuration.GetConnectionString("DurableFunctionsSampleDB");
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            var log = new ProcessStartLog
             {
-                conn.Open();
-                string insertSql = @"
-                    INSERT INTO 
-                        dfunc.ProcessStartLog (Id, FileName, StartTime)
-                    VALUES 
-                        (NEXT VALUE FOR dfunc.Seq_ProcessStart, @FileName, @StartTime);";
+                FileName = fileName,
+                StartTime = DateTime.Now
+            };
 
-                using (SqlCommand cmd = new SqlCommand(insertSql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@StartTime", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@FileName", fileName);
-                    int rows = await cmd.ExecuteNonQueryAsync();
-                }
-            }
-            return;
+            _durableFunctionsSampleContext.ProcessStartLogs.Add(log);
+            await _durableFunctionsSampleContext.SaveChangesAsync();
         }
     }
 }

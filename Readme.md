@@ -43,18 +43,28 @@
 ``` bash
 docker compose up -d
 ```
-
+<!-- 
 * （初回のみ）DBに接続し、DDL.sqlを実行（任意のクライアントツールで接続、実行）
 
 ``` bash
 # sqlcmd.exe で実行する場合 
 sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
+``` -->
+
+* （初回のみ）dotnet-ef によるデータベース作成
+
 ```
+dotnet ef migrations add InitialCreate
+dotnet ef database update -- 'Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True'
+```
+
+https://learn.microsoft.com/ja-jp/ef/core/get-started/overview/first-app?tabs=netcore-cli
+https://learn.microsoft.com/ja-jp/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli
 
 * （初回のみ）SQL Serverの接続用シークレット作成
 
 ``` bash
-dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDB' 'Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True'
+dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDb' 'Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True'
 ```
 
 * Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
@@ -172,6 +182,12 @@ graph TD;
 * [Durable Functions のファンアウト/ファンイン シナリオ - クラウド バックアップの例](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-cloud-backup?tabs=csharp)
   * "ファンアウト/ファンイン" は、複数の関数を同時に実行した後、その結果に対して集計を行うパターン
 
+## テスト実装
+
+* [Durable Functions 単体テスト (C# Isolated)](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-unit-testing-dotnet-isolated)
+* [実稼働データベース システムを使用しないテスト](https://learn.microsoft.com/ja-jp/ef/core/testing/testing-without-the-database)
+
+
 ## その他
 
 * [Durable Functions のバインド (Azure Functions)](https://learn.microsoft.com/ja-jp/azure/azure-functions/durable/durable-functions-bindings?tabs=python-v2%2Cin-process%2C2x-durable-functions&pivots=programming-language-csharp)
@@ -182,6 +198,8 @@ graph TD;
   * この作業を自動化する方法が該当の [issue](https://github.com/microsoft/vscode-azurefunctions/issues/4416) で EvilConsultant さんから提案されている
 
 * [SQLServerをdocker-composeで使いたい！](https://qiita.com/y-yoshizawa/items/4535c06eaa0245a6cd0d)
+
+https://learn.microsoft.com/ja-jp/ef/core/cli/dbcontext-creation?tabs=dotnet-core-cli
 
 ## 参考資料
 
