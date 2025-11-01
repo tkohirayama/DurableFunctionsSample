@@ -44,8 +44,6 @@
 docker compose up -d
 ```
 
-* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
-
 * （初回のみ）DBに接続し、DDL.sqlを実行（任意のクライアントツールで接続、実行）
 
 ``` bash
@@ -58,6 +56,8 @@ sqlcmd -S localhost -U sa -P sqlpass123! -i ./DDL.sql
 ``` bash
 dotnet user-secrets set 'ConnectionStrings:DurableFunctionsSampleDB' 'Data Source=tcp:localhost, 1433;Initial Catalog=dfuncdb;User ID=sa;Password=sqlpass123!;TrustServerCertificate=True'
 ```
+
+* Azuriteの起動 - コマンドパレットを起動し、`Azurite: Start` を実行
 
 ### デバッグ実行
 
