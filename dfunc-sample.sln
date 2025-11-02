@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-dfunc", "src\azure-dfunc.csproj", "{10C42B3C-D25D-447B-8568-F05E4F85B004}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunDurableFunctionsSampleTest", "test\RunDurableFunctionsSampleTest.csproj", "{0E76FAF3-E441-49AC-AA3B-C138BDC9169B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunDurableFunctionsSampleTests", "test\RunDurableFunctionsSampleTests.csproj", "{CC1191F4-A88E-4989-A1D4-1B2795BA45CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,9 +20,9 @@ Global
 		{10C42B3C-D25D-447B-8568-F05E4F85B004}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10C42B3C-D25D-447B-8568-F05E4F85B004}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10C42B3C-D25D-447B-8568-F05E4F85B004}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0E76FAF3-E441-49AC-AA3B-C138BDC9169B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0E76FAF3-E441-49AC-AA3B-C138BDC9169B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0E76FAF3-E441-49AC-AA3B-C138BDC9169B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E76FAF3-E441-49AC-AA3B-C138BDC9169B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC1191F4-A88E-4989-A1D4-1B2795BA45CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC1191F4-A88E-4989-A1D4-1B2795BA45CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC1191F4-A88E-4989-A1D4-1B2795BA45CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC1191F4-A88E-4989-A1D4-1B2795BA45CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

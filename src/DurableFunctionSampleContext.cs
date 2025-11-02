@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TH.MyApp.DurableFunctionsSample.Domain;
 
 namespace TH.MyApp.DurableFunctionsSample;
 
@@ -15,9 +16,3 @@ public class DurableFunctionsSampleContext : DbContext
     public DbSet<ProcessStartLog> ProcessStartLogs { get; set; } = null!;
 }
 
-public class ProcessStartLog
-{
-    public int Id { get; set; }
-    public string FileName { get; set; } = null!;
-    public DateTime StartTime { get; set; }
-}

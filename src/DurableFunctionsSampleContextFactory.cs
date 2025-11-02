@@ -7,7 +7,7 @@ namespace TH.MyApp.DurableFunctionsSample
         public DurableFunctionsSampleContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DurableFunctionsSampleContext>();
-            optionsBuilder.UseSqlite(args[0]);
+            optionsBuilder.UseSqlServer(args[0]);
 
             return new DurableFunctionsSampleContext(optionsBuilder.Options);
         }

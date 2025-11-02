@@ -270,3 +270,6 @@ __azurite*
 
 # mssql
 mssql/*
+
+# efcore
+Migrations

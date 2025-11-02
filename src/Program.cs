@@ -6,6 +6,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using TH.MyApp.DurableFunctionsSample;
 using Microsoft.EntityFrameworkCore;
+using TH.MyApp.DurableFunctionsSample.Domain;
 
 
 var builder = FunctionsApplication.CreateBuilder(args);
@@ -37,6 +38,8 @@ builder.Services
             var blobConnectionString = builder.Configuration.GetConnectionString("BlobStorage");
             clientBuilder.AddBlobServiceClient(blobConnectionString);
         });
+
+builder.Services.AddScoped<IProcessStartLogRepository, ProcessStartLogRepository>();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("DurableFunctionsSampleDb");
 builder.Services.AddDbContext<DurableFunctionsSampleContext>(options =>

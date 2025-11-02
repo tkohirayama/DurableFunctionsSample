@@ -2,14 +2,15 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
 {
     using Microsoft.Azure.Functions.Worker;
     using Microsoft.Extensions.Logging;
+    using TH.MyApp.DurableFunctionsSample.Domain;
 
     public class Activity1
     {
-        private readonly DurableFunctionsSampleContext _durableFunctionsSampleContext;
+        private readonly IProcessStartLogRepository _processStartLogRepository;
 
-        public Activity1(DurableFunctionsSampleContext durableFunctionsSampleContext)
+        public Activity1(IProcessStartLogRepository processStartLogRepository)
         {
-            _durableFunctionsSampleContext = durableFunctionsSampleContext;
+            _processStartLogRepository = processStartLogRepository;
         }
 
         [Function("Activity1")]
@@ -21,11 +22,10 @@ namespace TH.MyApp.DurableFunctionsSample.Activities
             var log = new ProcessStartLog
             {
                 FileName = fileName,
-                StartTime = DateTime.Now
+                StartTime = DateTime.UtcNow
             };
 
-            _durableFunctionsSampleContext.ProcessStartLogs.Add(log);
-            await _durableFunctionsSampleContext.SaveChangesAsync();
+            _ = await _processStartLogRepository.Add(log);
         }
     }
 }
